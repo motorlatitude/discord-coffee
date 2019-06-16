@@ -16,7 +16,7 @@ class Utils
         level = "\x1b[38;5;244m[DEBUG]"
       d = new Date()
       time = "["+d.getDate()+"/"+(parseInt(d.getMonth())+1)+"/"+d.getFullYear()+" "+d.toLocaleTimeString()+"] "
-      if @level == "verbose" then console.log(level+time+msg+"\x1b[0m")
+      if @level == "verbose" then console.log(level+time+"[node-discord]"+msg+"\x1b[0m")
       else if @level == "cmd" then @output_list.push(level+time+"[node-discord]"+msg+"\x1b[0m")
 
 
