@@ -1,11 +1,11 @@
 {
-  "name": "node-discord",
+  "name": "discord-coffee",
   "version": "0.2.1",
   "description": "A Discord Framework for NodeJS written using CoffeeScript",
   "main": "main.coffee",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/motorlatitude/node-discord.git"
+    "url": "git+https://github.com/motorlatitude/discord-coffee.git"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -20,9 +20,9 @@
   "author": "Lennart Hase",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/motorlatitude/node-discord/issues"
+    "url": "https://github.com/motorlatitude/discord-coffee/issues"
   },
-  "homepage": "https://github.com/motorlatitude/node-discord#readme",
+  "homepage": "https://github.com/motorlatitude/discord-coffee#readme",
   "dependencies": {
     "node-opus": "^0.3.2",
     "stream-chunker": "^1.2.8",
