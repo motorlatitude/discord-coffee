@@ -1,9 +1,13 @@
 {
-  "name": "node-discord",
+  "name": "@motorlatitude/node-discord",
   "version": "0.2.0",
   "private": true,
   "description": "A Discord Framework for NodeJS written using Coffeescript",
   "main": "discordClient.coffee",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/motorlatitude/node-discord.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,5 +19,9 @@
     "Commands"
   ],
   "author": "Lennart Hase",
-  "license": "ISC"
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/motorlatitude/node-discord/issues"
+  },
+  "homepage": "https://github.com/motorlatitude/node-discord#readme"
 }
