@@ -1,5 +1,3 @@
-u = require('../utils.coffee')
-utils = new u()
 DiscordMethods = require './DiscordMethods'
 Requester = require './Requester'
 

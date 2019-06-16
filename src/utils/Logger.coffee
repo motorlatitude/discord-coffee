@@ -1,5 +1,5 @@
 
-class Utils
+class Logger
 
   constructor: () ->
     @level = "verbose"
@@ -20,5 +20,4 @@ class Utils
       if @level == "verbose" then console.log(level+time+"[node-discord] "+msg+"\x1b[0m")
       else if @level == "cmd" then @output_list.push(level+time+"[node-discord] "+msg+"\x1b[0m")
 
-
-module.exports = Utils
+module.exports = Logger

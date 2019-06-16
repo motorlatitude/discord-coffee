@@ -1,7 +1,5 @@
 {EventEmitter} = require('events')
-u = require '../utils.coffee'
 fs = require 'fs'
-utils = new u()
 VoicePacket = require './voicePacket.coffee'
 childProc = require 'child_process'
 chunker = require 'stream-chunker'
@@ -14,7 +12,7 @@ class AudioPlayer extends EventEmitter
   
   constructor: (stream, @voiceConnection, @discordClient) ->
     super()
-    utils.debug("New AudioPlayer constructed")
+    @discordClient.Logger.debug("New AudioPlayer constructed")
     @glob_stream = stream
     #setup stream
     @ffmpegDone = false
@@ -36,7 +34,7 @@ class AudioPlayer extends EventEmitter
       '-loglevel', 'verbose',
       'pipe:1'
     ], {detached: true}).on('error', (e) ->
-      utils.debug("FFMPEG encoding error: "+e.toString(),"error")
+      self.discordClient.Logger.debug("FFMPEG encoding error: "+e.toString(),"error")
     )
     chnkr = chunker(1920*2, {
       flush: true,
@@ -50,33 +48,33 @@ class AudioPlayer extends EventEmitter
     self.enc.stdout.pipe(chnkr)
 
     self.enc.on('error', (err) ->
-      utils.debug("Error Occurred: "+err.toString(),"error")
+      self.discordClient.Logger.debug("Error Occurred: "+err.toString(),"error")
     )
 
     self.enc.stdout.on('error', (err) ->
-      utils.debug("Error Occurred: "+err.toString(),"error")
+      self.discordClient.Logger.debug("Error Occurred: "+err.toString(),"error")
     )
 
     self.enc.stdout.once('end', () ->
-      utils.debug("Stdout END")
+      self.discordClient.Logger.debug("Stdout END")
       self.enc.kill()
       process.kill(-self.enc.pid); #stop possible memory leak
     )
 
     self.enc.once('close', (code, signal) ->
-      utils.debug "FFMPEG Stream Closed"
+      self.discordClient.Logger.debug "FFMPEG Stream Closed"
       self.enc.stdout.emit("end")
       self.ffmpegDone = true
     )
 
     self.enc.stderr.once('data', (d) ->
-      utils.debug("Storing Voice Packets")
+      self.discordClient.Logger.debug("Storing Voice Packets")
       self.stopSend = false
       self.emit("ready")
     )
 
     self.enc.stderr.on('data', (d) ->
-      utils.debug("[STDERR]: "+d)
+      self.discordClient.Logger.debug("[STDERR]: "+d)
       if d.toString().match(/time=(.*?)\s/gmi)
         regexMatch = /time=(.*?)\s/gmi
         matches = regexMatch.exec(d.toString())
@@ -87,20 +85,20 @@ class AudioPlayer extends EventEmitter
     )
 
     self.enc.stdout.once('readable', () ->
-      utils.debug("ffmpeg stream readable")
+      self.discordClient.Logger.debug("ffmpeg stream readable")
     )
 
     stream.on('close', () ->
-      utils.debug("User Stream Closed","warn")
+      self.discordClient.Logger.debug("User Stream Closed","warn")
     )
 
     stream.on('error', (err) ->
-      utils.debug("User Stream Error","error")
+      self.discordClient.Logger.debug("User Stream Error","error")
       console.log err
     )
 
     stream.on('end', () ->
-      utils.debug "User Stream Ended"
+      self.discordClient.Logger.debug "User Stream Ended"
     )
 
   packageData: (chunk) ->
@@ -119,7 +117,7 @@ class AudioPlayer extends EventEmitter
       else if @ffmpegDone && !@streamFinished
         @streamFinished = true
         @sendEmptyBuffer()
-        utils.debug("Stream Done in sendToVoiceConnection")
+        self.discordClient.Logger.debug("Stream Done in sendToVoiceConnection")
         @emit("streamDone")
         @seekPosition = 0
         self.destroy()
@@ -129,7 +127,7 @@ class AudioPlayer extends EventEmitter
         self.sendToVoiceConnection(startTime, cnt + 1)
       , 20 + (nextTime - new Date().getTime()));
     else
-      utils.debug("Stream Paused via stopSend")
+      self.discordClient.Logger.debug("Stream Paused via stopSend")
       @sendEmptyBuffer()
       @emit("paused")
 
@@ -138,7 +136,7 @@ class AudioPlayer extends EventEmitter
     if @packageList
       @voiceConnection.streamPacketList.push(streamBuff)
     else
-      utils.debug("Couldn't send empty buffer","error")
+      @discordClient.Logger.debug("Couldn't send empty buffer","error")
 
   stopSending: () ->
     @stopSend = true
@@ -148,14 +146,14 @@ class AudioPlayer extends EventEmitter
   ###
   
   pause: () ->
-    utils.debug("Pausing Stream")
+    self.discordClient.Logger.debug("Pausing Stream")
     @voiceConnection.setSpeaking(false)
     @stopSending()
 
   play: () ->
     #start sending voice data and turn speaking on for bot
     self = @
-    utils.debug("Playing Stream")
+    self.discordClient.Logger.debug("Playing Stream")
     self.stopSend = false
     self.voiceConnection.setSpeaking(true)
     @sendEmptyBuffer()
@@ -164,11 +162,11 @@ class AudioPlayer extends EventEmitter
 
   stop: () ->
     #stop sending voice data and turn speaking off for bot
-    utils.debug("Stopping Stream")
+    self = @
+    self.discordClient.Logger.debug("Stopping Stream")
     @voiceConnection.streamPacketList = [] #empty current packet list to be sent to avoid stuttering
     @sendEmptyBuffer()
     @voiceConnection.setSpeaking(false)
-    self = @
     self.stopSending()
     try
       self.glob_stream.unpipe()
@@ -180,14 +178,14 @@ class AudioPlayer extends EventEmitter
     catch err
       self.emit("streamDone")
       self.destroy()
-      utils.debug("Error stopping sending of voice packets: "+err.toString(),"error")
+      self.discordClient.Logger.debug("Error stopping sending of voice packets: "+err.toString(),"error")
 
   stop_kill: () ->
-    utils.debug("Stopping Stream")
+    self = @
+    self.discordClient.Logger.debug("Stopping Stream")
     @voiceConnection.streamPacketList = [] #empty current packet list to be sent to avoid stuttering
     @sendEmptyBuffer()
     @voiceConnection.setSpeaking(false)
-    self = @
     self.stopSending()
     try
       self.glob_stream.unpipe()
@@ -197,7 +195,7 @@ class AudioPlayer extends EventEmitter
       self.destroy()
     catch err
       self.destroy()
-      utils.debug("Error stopping sending of voice packets: "+err.toString(),"error")
+      self.discordClient.Logger.debug("Error stopping sending of voice packets: "+err.toString(),"error")
 
   destroy: () ->
     delete @

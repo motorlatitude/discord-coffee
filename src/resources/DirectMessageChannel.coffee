@@ -1,5 +1,3 @@
-u = require('../utils.coffee')
-utils = new u()
 Constants = require './../constants'
 
 class DirectMessageChannel

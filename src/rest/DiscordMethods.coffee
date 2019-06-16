@@ -1,5 +1,3 @@
-u = require('../utils.coffee')
-utils = new u()
 Message = require '../resources/Message'
 TextChannel = require '../resources/TextChannel'
 VoiceChannel = require '../resources/VoiceChannel'

@@ -2,7 +2,7 @@
   "name": "node-discord",
   "version": "0.2.1",
   "description": "A Discord Framework for NodeJS written using CoffeeScript",
-  "main": "discordClient.coffee",
+  "main": "main.coffee",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/motorlatitude/node-discord.git"
