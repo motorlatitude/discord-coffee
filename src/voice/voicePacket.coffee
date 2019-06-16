@@ -26,5 +26,4 @@ class VoicePacket
 
     return returnBuffer
 
-
 module.exports = VoicePacket
