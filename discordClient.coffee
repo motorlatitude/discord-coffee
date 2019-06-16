@@ -1,7 +1,7 @@
 EventEmitter = require('events').EventEmitter
 Constants = require './constants.coffee'
 req = require 'request'
-pjson = require '../package.json'
+pjson = require './package.json'
 u = require('./utils.coffee')
 DiscordManager = require './rest/DiscordManager'
 
