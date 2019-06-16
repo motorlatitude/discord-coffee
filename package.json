@@ -1,0 +1,19 @@
+{
+  "name": "node-discord",
+  "version": "0.2.0",
+  "private": true,
+  "description": "A Discord Framework for NodeJS written using Coffeescript",
+  "main": "discordClient.coffee",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Bot",
+    "Discord",
+    "Node",
+    "Audio",
+    "Commands"
+  ],
+  "author": "Lennart Hase",
+  "license": "ISC"
+}
