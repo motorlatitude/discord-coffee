@@ -42,7 +42,7 @@ class DiscordClient extends EventEmitter
 
   #PUBLIC METHODS
   connect: () ->
-    @utils.debug("Starting MotorBot "+pjson.version,"info")
+    @utils.debug("Starting node-discord "+pjson.version,"info")
     @internals = {}
     @internals.voice = {}
     @internals.sequence = 0
