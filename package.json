@@ -1,7 +1,6 @@
 {
   "name": "@motorlatitude/node-discord",
   "version": "0.2.0",
-  "private": true,
   "description": "A Discord Framework for NodeJS written using Coffeescript",
   "main": "discordClient.coffee",
   "repository": {
@@ -23,5 +22,12 @@
   "bugs": {
     "url": "https://github.com/motorlatitude/node-discord/issues"
   },
-  "homepage": "https://github.com/motorlatitude/node-discord#readme"
+  "homepage": "https://github.com/motorlatitude/node-discord#readme",
+  "dependencies": {
+    "node-opus": "^0.3.2",
+    "response-time": "^2.3.2",
+    "stream-chunker": "^1.2.8",
+    "tweetnacl": "^1.0.1",
+    "ws": "^7.0.0"
+  }
 }

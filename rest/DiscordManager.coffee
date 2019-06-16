@@ -6,7 +6,7 @@ Requester = require './Requester'
 class DiscordManager
 
   constructor: (@client) ->
-    @requester = new Requester()
+    @requester = new Requester(@client.options.token)
 
   methods: () ->
     return new DiscordMethods(@client, @requester)

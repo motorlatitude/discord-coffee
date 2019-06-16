@@ -1,12 +1,11 @@
 u = require('../utils.coffee')
 utils = new u()
 Constants = require './../constants.coffee'
-keys = require './../../keys.json'
 req = require 'request'
 
 class Requester
 
-  constructor: () ->
+  constructor: (@token) ->
     @host = Constants.api.host
 
   sendRequest: (method, endpoint, data) ->
@@ -16,7 +15,7 @@ class Requester
         url: self.host+endpoint,
         method: method
         headers: {
-          "Authorization": "Bot "+keys.token
+          "Authorization": "Bot "+self.token
         },
         json: true
         body: data
@@ -43,7 +42,7 @@ class Requester
         url: self.host+endpoint,
         method: method
         headers: {
-          "Authorization": "Bot "+keys.token,
+          "Authorization": "Bot "+self.token,
           "Content-Type": "multipart/form-data"
         }
       }, (err, httpResponse, body) ->

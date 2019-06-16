@@ -1,6 +1,5 @@
 EventEmitter = require('events').EventEmitter
 Constants = require './constants.coffee'
-keys = require './../keys.json'
 req = require 'request'
 pjson = require '../package.json'
 u = require('./utils.coffee')
@@ -21,7 +20,7 @@ class DiscordClient extends EventEmitter
     self = @
     @utils.debug("Retrieving Discord Gateway Server")
     req.get({url: Constants.api.host+"/gateway/bot?v=6", json: true, time: true, headers: {
-        "Authorization": "Bot "+keys.token
+        "Authorization": "Bot "+self.options.token
       }}, (err, res, data) ->
       if res.statusCode != 200 || err
         self.utils.debug("Error Occurred Obtaining Gateway Server: "+res.statusCode+" "+res.statusMessage,"error")
