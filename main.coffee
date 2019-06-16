@@ -1,5 +1,5 @@
 EventEmitter = require('events').EventEmitter
-Constants = require './constants.coffee'
+Constants = require './src/constants.coffee'
 req = require 'request'
 pjson = require './package.json'
 debug = require('./src/utils/Logger.coffee')
