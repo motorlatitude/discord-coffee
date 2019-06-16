@@ -1,5 +1,5 @@
 {
-  "name": "@motorlatitude/node-discord",
+  "name": "node-discord",
   "version": "0.2.0",
   "description": "A Discord Framework for NodeJS written using Coffeescript",
   "main": "discordClient.coffee",
