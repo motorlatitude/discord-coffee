@@ -25,7 +25,6 @@
   "homepage": "https://github.com/motorlatitude/node-discord#readme",
   "dependencies": {
     "node-opus": "^0.3.2",
-    "response-time": "^2.3.2",
     "stream-chunker": "^1.2.8",
     "tweetnacl": "^1.0.1",
     "ws": "^7.0.0"
