@@ -26,8 +26,8 @@ class UDPClient extends EventEmitter
     self = @
     @udpClient.send(udpInitPacket, 0, udpInitPacket.length, parseInt(@conn.port), @conn.endpoint, (err, bytes) ->
       if err
-        return utils.debug("Failed to establish UDP Connection","error")
-      self.voiceConnection.discordClient.utils.debug("UDP Init message sent")
+        return self.voiceConnection.discordClient.Logger.debug("Failed to establish UDP Connection","error")
+      self.voiceConnection.discordClient.Logger.debug("UDP Init message sent")
     )
     self = @
     @udpClient.on('message', (msg, rinfo) -> self.handleUDPMessage(msg, rinfo))
@@ -94,8 +94,8 @@ class UDPClient extends EventEmitter
             @userPacketQueue[id].push({sequence: sequence, timestamp: timestamp, data: output})###
     else
       @connected = true
-      @voiceConnection.discordClient.utils.debug("UDP Package Received From: "+rinfo.address+":"+rinfo.port)
-      @voiceConnection.discordClient.utils.debug("UDP Server responded successfully","info")
+      @voiceConnection.discordClient.Logger.debug("UDP Package Received From: "+rinfo.address+":"+rinfo.port)
+      @voiceConnection.discordClient.Logger.debug("UDP Server responded successfully","info")
       buffArr = JSON.parse(JSON.stringify(msg)).data
       localIP = ""
       localPort = msg.readUIntLE(msg.length-2,2).toString(10)
@@ -107,7 +107,7 @@ class UDPClient extends EventEmitter
           else
             break
         i++
-      @voiceConnection.discordClient.utils.debug("Local Address: "+localIP+":"+localPort)
+      @voiceConnection.discordClient.Logger.debug("Local Address: "+localIP+":"+localPort)
       @emit("ready", localIP, localPort)
 
   send: (packet, x, packetLength, port, endpoint, cb) ->
