@@ -163,7 +163,7 @@ class Dispatcher
       @discordClient.Logger.debug("Message Create Event Occurred in unknown channel","warn")
 
   handleMessageUpdate: (data) ->
-    #console.log data.d
+    console.log data.d
     msg = data.d
     if @discordClient.channels[data.d.channel_id]
       @discordClient.emit("messageUpdate",new Message(@discordClient, msg))
