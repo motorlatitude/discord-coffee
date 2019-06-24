@@ -112,6 +112,7 @@ class Dispatcher
       @discordClient.Logger.debug("Channel Pins Update Event Occurred in unknown channel","warn")
 
   handleGuildCreate: (data) -> #fired when bot lazy loads available guilds and joins a new guild
+    console.log data.d.members
     for i, channel of data.d.channels
       channel.guild_id = data.d.id
       if channel.type == Constants.channelTypes.voice
