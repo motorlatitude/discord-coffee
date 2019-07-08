@@ -146,6 +146,7 @@ class AudioPlayer extends EventEmitter
   ###
   
   pause: () ->
+    self = @
     self.discordClient.Logger.debug("Pausing Stream")
     @voiceConnection.setSpeaking(false)
     @stopSending()
