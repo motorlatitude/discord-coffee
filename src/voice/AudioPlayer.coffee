@@ -22,7 +22,6 @@ class AudioPlayer extends EventEmitter
     @seekPosition = 0
     @packageList = []
     @waveform = []
-    @waveform_length = 0
     self = @
     self.enc = childProc.spawn('ffmpeg', [
       '-i', 'pipe:0',
@@ -100,9 +99,7 @@ class AudioPlayer extends EventEmitter
         a = time.split(':')
         seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2].split(".")[0])
         self.emit("progress", seconds)
-        if self.waveform.length != self.waveform_length
-          self.emit("VoiceWaveForm", self.waveform)
-          self.waveform_length = self.waveform.length
+        self.emit("VoiceWaveForm", self.waveform)
     )
 
     self.enc.stdout.once('readable', () ->
