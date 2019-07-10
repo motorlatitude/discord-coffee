@@ -130,14 +130,20 @@ class AudioPlayer extends EventEmitter
     return arr
 
   getMax: (arr) ->
-    return arr.reduce((p, v) ->
-      return ( if p > v then p else v )
-    )
+    if arr.length > 0
+      return arr.reduce((p, v) ->
+        return ( if p > v then p else v )
+      )
+    else
+      return 0
 
   getMin: (arr) ->
-    return arr.reduce((p, v) ->
-      return ( if p < v then p else v )
-    )
+    if arr.length > 0
+      return arr.reduce((p, v) ->
+        return ( if p < v then p else v )
+      )
+    else
+      return 0
 
   getAverage: (arr) ->
     len = arr.length;
