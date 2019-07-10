@@ -42,10 +42,10 @@ class AudioPlayer extends EventEmitter
       align: true
     })
     self.opusEncoder = self.voiceConnection.opusEncoder
+    temp_waveform = []
     chnkr.on("data", (chunk) ->
       packet = chunk
       i = 0
-      temp_waveform = []
       while i < packet.length
         if i >= packet.length - 1
           break
