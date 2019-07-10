@@ -111,8 +111,20 @@ class AudioPlayer extends EventEmitter
       @voiceConnection.buffer_size = new Date(self.packageList.length*20).toISOString().substr(11, 8)
       packet = @packageList.shift()
       if packet
+        i = 0
+        waveform = []
+        while i < packet.length
+          if i >= packet.length - 1
+            break
+          uint = Math.floor(packet.readInt16LE(i))
+          uint = Math.min(32767, uint)
+          uint = Math.max(-32767, uint)
+          # Write 2 new bytes into other buffer;
+          waveform.push(uint)
+          i += 2
         @voiceConnection.streamPacketList.push(packet)
         @emit("streamTime", self.seekCnt*20)
+        @emit("VoiceWaveForm",waveform)
         @seekPosition = self.seekCnt*20
       else if @ffmpegDone && !@streamFinished
         @streamFinished = true
