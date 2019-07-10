@@ -59,7 +59,7 @@ class AudioPlayer extends EventEmitter
           temp_waveform = []
           self.waveform.push(maxInt)
         i += 2
-      self.normaliseWave(self.waveform, self.getMin(self.waveform), self.getMax(self.waveform))
+      # self.normaliseWave(self.waveform, self.getMin(self.waveform), self.getMax(self.waveform))
       self.packageData(chunk)
     )
     stream.pipe(self.enc.stdin)
