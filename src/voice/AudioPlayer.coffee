@@ -54,7 +54,7 @@ class AudioPlayer extends EventEmitter
         uint = Math.max(-32767, uint)
         # Write 2 new bytes into other buffer;
         temp_waveform.push(uint)
-        if temp_waveform.length > packet.length * 50 # bucket waveform data, we don't need it to be completely accurate ~ 1s chunks
+        if temp_waveform.length > packet.length * 100 # bucket waveform data, we don't need it to be completely accurate ~ 1s chunks
           maxInt = self.getAverage(temp_waveform) / 32767
           temp_waveform = []
           self.waveform.push(maxInt)
