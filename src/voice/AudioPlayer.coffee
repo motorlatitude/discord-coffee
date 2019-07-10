@@ -55,7 +55,7 @@ class AudioPlayer extends EventEmitter
         # Write 2 new bytes into other buffer;
         temp_waveform.push(uint)
         if temp_waveform.length > packet.length * 50 # bucket waveform data, we don't need it to be completely accurate ~ 1s chunks
-          maxInt = self.getAverage(temp_waveform) / 32767
+          maxInt = self.getMax(temp_waveform) / 32767
           temp_waveform = []
           self.waveform.push(maxInt)
         i += 2
@@ -119,12 +119,13 @@ class AudioPlayer extends EventEmitter
       self.discordClient.Logger.debug "User Stream Ended"
     )
 
-  getAverage: (arr) ->
+  getMax: (arr) ->
     len = arr.length;
-    tot = 0;
+    max = -Infinity;
+
     while len--
-      tot += arr[len]
-    return Math.floor(tot/len);
+      max = if arr[len] > max then arr[len] else max
+    return max;
 
   packageData: (chunk) ->
     if chunk && chunk instanceof Buffer
