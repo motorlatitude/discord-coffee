@@ -55,7 +55,7 @@ class AudioPlayer extends EventEmitter
         uint = Math.max(-32767, uint)
         # Write 2 new bytes into other buffer;
         temp_waveform.push(uint)
-        if temp_waveform.length > 48000 # bucket waveform data, we don't need it to be completely accurate
+        if temp_waveform.length > packet.length * 50 # bucket waveform data, we don't need it to be completely accurate ~ 1s chunks
           maxInt = Math.max temp_waveform...
           temp_waveform = []
           self.waveform.push(maxInt)
@@ -89,11 +89,6 @@ class AudioPlayer extends EventEmitter
       self.discordClient.Logger.debug("Storing Voice Packets")
       self.stopSend = false
       self.emit("ready")
-      setInterval(() ->
-        if self.waveform.length != self.waveform_length
-          self.emit("VoiceWaveForm", self.waveform)
-          self.waveform_length = self.waveform.length
-      , 1000)
     )
 
     self.enc.stderr.on('data', (d) ->
@@ -105,6 +100,9 @@ class AudioPlayer extends EventEmitter
         a = time.split(':')
         seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2].split(".")[0])
         self.emit("progress", seconds)
+        if self.waveform.length != self.waveform_length
+          self.emit("VoiceWaveForm", self.waveform)
+          self.waveform_length = self.waveform.length
     )
 
     self.enc.stdout.once('readable', () ->
