@@ -22,6 +22,7 @@ class AudioPlayer extends EventEmitter
     @seekPosition = 0
     @packageList = []
     @waveform = []
+    @waveform_packet_size = 1920 * 2 * 20
     self = @
     self.enc = childProc.spawn('ffmpeg', [
       '-i', 'pipe:0',
@@ -54,7 +55,7 @@ class AudioPlayer extends EventEmitter
         uint = Math.max(-32767, uint)
         # Write 2 new bytes into other buffer;
         temp_waveform.push(uint)
-        if temp_waveform.length > packet.length * 100 # bucket waveform data, we don't need it to be completely accurate ~ 1s chunks
+        if temp_waveform.length > self.waveform_packet_size # bucket waveform data, we don't need it to be completely accurate
           maxInt = self.getMax(temp_waveform) / 32767
           temp_waveform = []
           self.waveform.push(maxInt)
