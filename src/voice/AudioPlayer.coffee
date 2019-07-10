@@ -100,7 +100,7 @@ class AudioPlayer extends EventEmitter
         a = time.split(':')
         seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2].split(".")[0])
         self.emit("progress", seconds)
-        w = self.normaliseWave(self.waveform, self.getMin(self.waveform), self.getMax(self.waveform), 0, 1)
+        w = self.normaliseWave(self.waveform, self.getMin(self.waveform), self.getMax(self.waveform))
         self.emit("VoiceWaveForm", w, seconds)
     )
 
@@ -121,13 +121,15 @@ class AudioPlayer extends EventEmitter
       self.discordClient.Logger.debug "User Stream Ended"
     )
 
-  normaliseWave: (arr, arrMin, arrMax, min, max) ->
-    console.log "Normalise With, arrMin:"+arrMin+",arrMax:"+arrMax+",min:"+min+",max:"+max
-    len = arr.length
+  normaliseWave: (arr, min, max) ->
+    normalize = (val, max, min) ->
+      return (val - min) / (max - min)
 
-    while len--
-      arr[len] = min + (arr[len]  - arrMin) * (max - min) / (arrMax - arrMin);
-    return arr
+    hold_normed_values=[]
+    arr.forEach((this_num) ->
+      hold_normed_values.push(normalize(this_num, max, min))
+    )
+    return hold_normed_values
 
   getMax: (arr) ->
     if arr.length > 0
