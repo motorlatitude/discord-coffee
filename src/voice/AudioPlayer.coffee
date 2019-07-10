@@ -21,6 +21,8 @@ class AudioPlayer extends EventEmitter
     @seekCnt = 0
     @seekPosition = 0
     @packageList = []
+    @waveform = []
+    @waveform_length = 0
     self = @
     self.enc = childProc.spawn('ffmpeg', [
       '-i', 'pipe:0',
@@ -71,6 +73,11 @@ class AudioPlayer extends EventEmitter
       self.discordClient.Logger.debug("Storing Voice Packets")
       self.stopSend = false
       self.emit("ready")
+      setInterval(() ->
+        if self.waveform.length != self.waveform_length
+          self.emit("VoiceWaveForm", self.waveform)
+          self.waveform_length = self.waveform.length
+      , 1000)
     )
 
     self.enc.stderr.on('data', (d) ->
@@ -112,7 +119,7 @@ class AudioPlayer extends EventEmitter
       packet = @packageList.shift()
       if packet
         i = 0
-        waveform = []
+        temp_waveform = []
         while i < packet.length
           if i >= packet.length - 1
             break
@@ -120,11 +127,14 @@ class AudioPlayer extends EventEmitter
           uint = Math.min(32767, uint)
           uint = Math.max(-32767, uint)
           # Write 2 new bytes into other buffer;
-          waveform.push(uint)
+          temp_waveform.push(uint)
+          if temp_waveform.length > 100 # bucket waveform data, we don't need it to be completely accurate
+            maxInt = Math.max(temp_waveform)
+            temp_waveform = []
+            self.waveform.push(maxInt)
           i += 2
         @voiceConnection.streamPacketList.push(packet)
         @emit("streamTime", self.seekCnt*20)
-        @emit("VoiceWaveForm",waveform)
         @seekPosition = self.seekCnt*20
       else if @ffmpegDone && !@streamFinished
         @streamFinished = true
