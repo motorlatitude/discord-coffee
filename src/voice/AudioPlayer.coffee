@@ -44,6 +44,22 @@ class AudioPlayer extends EventEmitter
     })
     self.opusEncoder = self.voiceConnection.opusEncoder
     chnkr.on("data", (chunk) ->
+      packet = chunk
+      i = 0
+      temp_waveform = []
+      while i < packet.length
+        if i >= packet.length - 1
+          break
+        uint = Math.floor(packet.readInt16LE(i))
+        uint = Math.min(32767, uint)
+        uint = Math.max(-32767, uint)
+        # Write 2 new bytes into other buffer;
+        temp_waveform.push(uint)
+        if temp_waveform.length > 100 # bucket waveform data, we don't need it to be completely accurate
+          maxInt = Math.max temp_waveform...
+          temp_waveform = []
+          self.waveform.push(maxInt)
+        i += 2
       self.packageData(chunk)
     )
     stream.pipe(self.enc.stdin)
@@ -118,21 +134,6 @@ class AudioPlayer extends EventEmitter
       @voiceConnection.buffer_size = new Date(self.packageList.length*20).toISOString().substr(11, 8)
       packet = @packageList.shift()
       if packet
-        i = 0
-        temp_waveform = []
-        while i < packet.length
-          if i >= packet.length - 1
-            break
-          uint = Math.floor(packet.readInt16LE(i))
-          uint = Math.min(32767, uint)
-          uint = Math.max(-32767, uint)
-          # Write 2 new bytes into other buffer;
-          temp_waveform.push(uint)
-          if temp_waveform.length > 100 # bucket waveform data, we don't need it to be completely accurate
-            maxInt = Math.max(temp_waveform)
-            temp_waveform = []
-            self.waveform.push(maxInt)
-          i += 2
         @voiceConnection.streamPacketList.push(packet)
         @emit("streamTime", self.seekCnt*20)
         @seekPosition = self.seekCnt*20
