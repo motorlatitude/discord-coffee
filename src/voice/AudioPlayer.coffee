@@ -99,7 +99,7 @@ class AudioPlayer extends EventEmitter
         a = time.split(':')
         seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2].split(".")[0])
         self.emit("progress", seconds)
-        self.emit("VoiceWaveForm", self.waveform)
+        self.emit("VoiceWaveForm", self.waveform, seconds)
     )
 
     self.enc.stdout.once('readable', () ->
