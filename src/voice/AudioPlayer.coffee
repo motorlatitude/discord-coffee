@@ -60,7 +60,7 @@ class AudioPlayer extends EventEmitter
           temp_waveform = []
           self.waveform.push(maxInt)
         i += 2
-      self.waveform = self.normaliseWave(self.waveform, 0, 1)
+      self.waveform = self.normaliseWave(self.waveform, self.getMin(self.waveform), self.getMax(self.waveform), 0, 1)
       self.packageData(chunk)
     )
     stream.pipe(self.enc.stdin)
@@ -121,11 +121,11 @@ class AudioPlayer extends EventEmitter
       self.discordClient.Logger.debug "User Stream Ended"
     )
 
-  normaliseWave: (arr, min, max) ->
+  normaliseWave: (arr, arrMin, arrMax, min, max) ->
     len = arr.length
 
     while len--
-      arr[len] = (arr[len] - min) / (max - min)
+      arr[len] = min + (arr[len]  - arrMin) * (max - min) / (arrMax - arrMin);
     return arr
 
   getMax: (arr) ->
