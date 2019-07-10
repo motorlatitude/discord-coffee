@@ -55,7 +55,7 @@ class AudioPlayer extends EventEmitter
         # Write 2 new bytes into other buffer;
         temp_waveform.push(uint)
         if temp_waveform.length > packet.length * 50 # bucket waveform data, we don't need it to be completely accurate ~ 1s chunks
-          maxInt = self.getMax(temp_waveform)
+          maxInt = self.getMax(temp_waveform) / 32767
           temp_waveform = []
           self.waveform.push(maxInt)
         i += 2
