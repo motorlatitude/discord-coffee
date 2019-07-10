@@ -60,7 +60,6 @@ class AudioPlayer extends EventEmitter
           temp_waveform = []
           self.waveform.push(maxInt)
         i += 2
-      self.waveform = self.normaliseWave(self.waveform, self.getMin(self.waveform), self.getMax(self.waveform), 0, 1)
       self.packageData(chunk)
     )
     stream.pipe(self.enc.stdin)
@@ -101,7 +100,8 @@ class AudioPlayer extends EventEmitter
         a = time.split(':')
         seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2].split(".")[0])
         self.emit("progress", seconds)
-        self.emit("VoiceWaveForm", self.waveform, seconds)
+        w = self.normaliseWave(self.waveform, self.getMin(self.waveform), self.getMax(self.waveform), 0, 1)
+        self.emit("VoiceWaveForm", w, seconds)
     )
 
     self.enc.stdout.once('readable', () ->
