@@ -123,8 +123,6 @@ class AudioPlayer extends EventEmitter
 
   normaliseWave: (arr, min, max) ->
     len = arr.length
-    min = 0
-    max = 0
 
     while len--
       arr[len] = (arr[len] - min) / (max - min)
