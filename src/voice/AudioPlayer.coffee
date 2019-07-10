@@ -122,6 +122,7 @@ class AudioPlayer extends EventEmitter
     )
 
   normaliseWave: (arr, arrMin, arrMax, min, max) ->
+    console.log "Normalise With, arrMin:"+arrMin+",arrMax:"+arrMax+",min:"+min+",max:"+max
     len = arr.length
 
     while len--
