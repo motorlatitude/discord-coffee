@@ -88,8 +88,11 @@ class UDPClient extends EventEmitter
           msg.copy(@nonce, 0, 0, 12)
           data = nacl.secretbox.open(new Uint8Array(msg.slice(12)), new Uint8Array(@nonce), new Uint8Array(@voiceConnection.secretKey));
           data = new Buffer(data)
-          output = @opusEncoder.decode(data)
-          @emit("VOICE_PACKET", {id, user, sequence: sequence, timestamp: timestamp, data: output})
+          try
+            output = @opusEncoder.decode(data)
+            @emit("VOICE_PACKET", {id, user, sequence: sequence, timestamp: timestamp, data: output})
+          catch
+            console.log "Failed to decode"
     else
       @connected = true
       @voiceConnection.discordClient.Logger.debug("UDP Package Received From: "+rinfo.address+":"+rinfo.port)
