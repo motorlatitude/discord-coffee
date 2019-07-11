@@ -77,12 +77,12 @@ class UDPClient extends EventEmitter
       , 20)
 
   handleUDPMessage: (msg, rinfo) ->
+    console.log("Received Voice UDP Data")
     if @connected
       #Voice Receiving Code Block, disable for now to avoid storage overload
       ssrc = msg.readUInt32BE(8).toString(10)
       sequence = msg.readUIntBE(2,2)
       timestamp = msg.readUIntBE(4,4)
-      console.log("Received Voice UDP Data")
       for id, user of @voiceConnection.users
         if parseInt(user.ssrc) == parseInt(ssrc)
           msg.copy(@nonce, 0, 0, 12)
