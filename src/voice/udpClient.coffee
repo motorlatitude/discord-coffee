@@ -78,7 +78,7 @@ class UDPClient extends EventEmitter
   handleUDPMessage: (msg, rinfo) ->
     if @connected
       #Voice Receiving Code Block, disable for now to avoid storage overload
-      ###ssrc = msg.readUInt32BE(8).toString(10)
+      ssrc = msg.readUInt32BE(8).toString(10)
       sequence = msg.readUIntBE(2,2)
       timestamp = msg.readUIntBE(4,4)
       for id, user of @voiceConnection.users
@@ -87,11 +87,7 @@ class UDPClient extends EventEmitter
           data = nacl.secretbox.open(new Uint8Array(msg.slice(12)), new Uint8Array(@nonce), new Uint8Array(@voiceConnection.secretKey));
           data = new Buffer(data)
           output = @opusEncoder.decode(data)
-          if @userPacketQueue[id]
-            @userPacketQueue[id].push({sequence: sequence, timestamp: timestamp, data: output})
-          else
-            @userPacketQueue[id] = []
-            @userPacketQueue[id].push({sequence: sequence, timestamp: timestamp, data: output})###
+          @emit("VOICE_PACKET", {id, user, sequence: sequence, timestamp: timestamp, data: output})
     else
       @connected = true
       @voiceConnection.discordClient.Logger.debug("UDP Package Received From: "+rinfo.address+":"+rinfo.port)

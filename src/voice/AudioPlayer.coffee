@@ -123,6 +123,10 @@ class AudioPlayer extends EventEmitter
       self.discordClient.Logger.debug "User Stream Ended"
     )
 
+    @voiceConnection.udpClient.on("VOICE_PACKET", (obj) ->
+      self.emit("INCOMING_VOICE_PACKET", obj)
+    )
+
   normaliseWave: (arr, min, max) ->
     normalize = (val, max, min) ->
       return (val - min) / (max - min)
