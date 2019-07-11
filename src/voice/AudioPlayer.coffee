@@ -23,6 +23,7 @@ class AudioPlayer extends EventEmitter
     @packageList = []
     @waveform = []
     @waveform_packet_size = 1920 * 2 * 20
+    @progress_seconds = 0
     self = @
     self.enc = childProc.spawn('ffmpeg', [
       '-i', 'pipe:0',
@@ -99,6 +100,7 @@ class AudioPlayer extends EventEmitter
         time = matches[1]
         a = time.split(':')
         seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2].split(".")[0])
+        self.progress_seconds = seconds
         self.emit("progress", seconds)
         w = self.normaliseWave(self.waveform, self.getMin(self.waveform), self.getMax(self.waveform))
         self.emit("VoiceWaveForm", w, seconds)
@@ -154,6 +156,11 @@ class AudioPlayer extends EventEmitter
     while len--
       tot += arr[len]
     return tot/len;
+
+  getWaveForm: () ->
+    self = @
+    w = self.normaliseWave(self.waveform, self.getMin(self.waveform), self.getMax(self.waveform))
+    self.emit("VoiceWaveForm", w, self.progress_seconds)
 
   packageData: (chunk) ->
     if chunk && chunk instanceof Buffer
