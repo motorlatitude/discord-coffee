@@ -77,7 +77,7 @@ class UDPClient extends EventEmitter
       , 20)
 
   handleUDPMessage: (msg, rinfo) ->
-    console.log("Received Voice UDP Data")
+    # console.log("Received Voice UDP Data")
     if @connected
       #Voice Receiving Code Block, disable for now to avoid storage overload
       ssrc = msg.readUInt32BE(8).toString(10)
