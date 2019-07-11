@@ -1,6 +1,7 @@
 fs = require 'fs'
 {EventEmitter} = require 'events'
 dgram = require 'dgram'
+Opus = require 'node-opus'
 nacl = require('tweetnacl')
 async = require 'async'
 
@@ -12,7 +13,7 @@ class UDPClient extends EventEmitter
     @nonce = new Buffer(24);
     @nonce.fill(0);
     @conn = {}
-    #@opusEncoder = new Opus.OpusEncoder(96000, 2)
+    @opusEncoder = new Opus.OpusEncoder(48000, 2)
     @userPacketQueue = {}
     @timestampDiff = undefined
     @prevTimestamp = undefined
@@ -81,6 +82,7 @@ class UDPClient extends EventEmitter
       ssrc = msg.readUInt32BE(8).toString(10)
       sequence = msg.readUIntBE(2,2)
       timestamp = msg.readUIntBE(4,4)
+      console.log("Received Voice UDP Data")
       for id, user of @voiceConnection.users
         if parseInt(user.ssrc) == parseInt(ssrc)
           msg.copy(@nonce, 0, 0, 12)
